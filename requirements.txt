@@ -1,0 +1,22 @@
+# Dependencias — UIDE · Aprendizaje Automático Estadístico (MIA-B)
+# Probado en Python 3.12 (ver mise.toml)
+# Última verificación: junio 2026
+
+# Computación científica
+numpy>=1.24,<2.0
+pandas>=2.0
+scipy>=1.10
+
+# Machine Learning clásico
+scikit-learn>=1.3
+joblib>=1.3
+
+# Visualización
+matplotlib>=3.7
+seaborn>=0.12
+
+# Notebooks
+jupyter>=1.0
+ipykernel>=6.25
+notebook>=7.0
+nbconvert>=7.0

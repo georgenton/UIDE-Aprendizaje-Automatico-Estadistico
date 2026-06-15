@@ -1,0 +1,40 @@
+# =============================================================
+#  Git ignore — UIDE · Aprendizaje Automático Estadístico
+# =============================================================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Python — entornos virtuales y caches
+venv/
+.venv/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# LaTeX — intermedios de compilación
+*.aux
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Otros
+*.tmp
+*.bak
