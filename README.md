@@ -4,7 +4,7 @@ Repositorio del **componente práctico** de la asignatura *Aprendizaje Automáti
 **Maestría en Inteligencia Artificial Aplicada (MIA-B)** de la UIDE.
 
 **Docente:** PhD. Iván García Santillán
-**Grupo 5:** Jorge Quizamánchuro · *[integrante 2]* · *[integrante 3]*
+**Grupo 2:** Jonathan Fabricio Gualli Ramírez · Jorge Armando Quizamánchuro Fuel · Raúl Marcelo Salazar Gamboa
 
 ---
 

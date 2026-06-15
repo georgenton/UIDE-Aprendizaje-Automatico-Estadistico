@@ -3,7 +3,7 @@
 **Maestría en Inteligencia Artificial Aplicada — UIDE**
 **Asignatura:** Aprendizaje Automático Estadístico — MIA-B · **Semana 1**
 **Docente:** PhD. Iván García Santillán
-**Grupo 5 · Autor principal:** Jorge Quizamánchuro
+**Grupo 2:** Jonathan Fabricio Gualli Ramírez · Jorge Armando Quizamánchuro Fuel · Raúl Marcelo Salazar Gamboa
 
 ---
 

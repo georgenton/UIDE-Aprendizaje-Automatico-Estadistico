@@ -27,8 +27,12 @@ md(r"""
 **Maestría en Inteligencia Artificial Aplicada — UIDE**
 **Asignatura:** Aprendizaje Automático Estadístico — MIA-B
 **Docente:** PhD. Iván García Santillán
-**Semana 1 — Componente práctico (Práctica Grupal — Grupo 5)**
-**Autor principal:** Jorge Quizamánchuro
+**Semana 1 — Componente práctico (Práctica Grupal — Grupo 2)**
+
+**Integrantes (Grupo 2):**
+- Gualli Ramírez, Jonathan Fabricio
+- Quizamánchuro Fuel, Jorge Armando
+- Salazar Gamboa, Raúl Marcelo
 
 ---
 
@@ -762,7 +766,7 @@ md(r"""
 > *Cada integrante del equipo describe en 2-3 líneas cómo aplicaría los contenidos de esta semana en su
 > entorno laboral o proyecto de titulación.*
 
-**Integrante 1 – Jorge Quizamánchuro:**
+**Jorge Armando Quizamánchuro Fuel:**
 En mi plataforma SaaS de psicoeducación, este flujo de clasificación binaria con priorización del
 recall es directamente aplicable a un *screening* de riesgo psicológico: igual que aquí el Falso
 Negativo (no detectar un maligno) es el error crítico, en salud mental no detectar a un usuario en
@@ -770,10 +774,10 @@ riesgo es el error que más debemos minimizar. La selección de características
 comparación baseline vs mejorado me dan un marco reproducible para construir modelos interpretables y
 auditables sobre datos de cuestionarios de bienestar.
 
-**Integrante 2 – [completar]:**
+**Jonathan Fabricio Gualli Ramírez:**
 _[placeholder — completar manualmente]_
 
-**Integrante 3 – [completar]:**
+**Raúl Marcelo Salazar Gamboa:**
 _[placeholder — completar manualmente]_
 
 ---
