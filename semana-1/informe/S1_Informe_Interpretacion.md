@@ -38,7 +38,7 @@ Preprocesamiento aplicado y verificado:
 - **Separabilidad:** los histogramas muestran clases bien separadas → se anticipa (y se confirma) un
   desempeño alto incluso para modelos lineales simples.
 
-## 3. Comparativa de los tres algoritmos
+## 3. Comparativa de los cuatro algoritmos
 
 | Modelo | Versión | Accuracy | Precision | Recall | F1 | AUC |
 |--------|---------|:--------:|:---------:|:------:|:--:|:---:|
@@ -48,6 +48,10 @@ Preprocesamiento aplicado y verificado:
 | KNN | Mejorado | 0,9649 | 1,0000 | 0,9048 | 0,9500 | 0,9861 |
 | Naive Bayes | Baseline | 0,9211 | 0,9231 | 0,8571 | 0,8889 | 0,9891 |
 | Naive Bayes | Mejorado | 0,9386 | 0,9730 | 0,8571 | 0,9114 | 0,9921 |
+| Random Forest | Baseline | 0,9737 | 1,0000 | 0,9286 | 0,9630 | 0,9929 |
+| Random Forest | Mejorado | 0,9649 | 1,0000 | 0,9048 | 0,9500 | 0,9937 |
+
+> *Random Forest se incorporó a propuesta del equipo como cuarto algoritmo.*
 
 **Ganador: Regresión Logística mejorada** (`C=10, solver='saga', max_iter=500`), con el mejor
 **Recall (0,976)** y el mejor **F1 (0,976)** — es decir, la que **menos Falsos Negativos** comete, que
@@ -57,6 +61,11 @@ es exactamente el criterio prioritario en oncología.
 - La **Regresión Logística** gana porque el problema es linealmente muy separable y la frontera lineal
   generaliza bien; además su recall mejorado significa que solo deja escapar 1 de cada 42 malignos del
   conjunto de prueba.
+- **Random Forest** (propuesta del equipo) es la mejor alternativa: precisión perfecta (1,0) y AUC muy
+  alto. Aporta un hallazgo instructivo: su *baseline* (recall 0,929) **superó a su versión optimizada**
+  (0,905) en el test. No es un fallo, sino un recordatorio de que el óptimo hallado por validación
+  cruzada **no siempre transfiere** al conjunto de prueba, sobre todo cuando el modelo base ya es muy
+  fuerte (típico de los ensambles).
 - **KNN** alcanza precisión perfecta (1,0) tras la optimización (`k=3, manhattan`), pero su recall se
   queda en 0,905: es más "conservador" detectando malignos, lo que clínicamente es **peor** (más FN).
 - **Naive Bayes** es el más débil: su suposición de **independencia entre variables** choca con la
@@ -70,7 +79,8 @@ es exactamente el criterio prioritario en oncología.
    entrenamiento y la señal de los tumores más agresivos. Se conservan por robustez y prudencia
    estadística (evitar sobreajuste a una sola división).
 3. **StandardScaler:** recall idéntico al de MinMaxScaler; se elige por idoneidad para KNN/lineales y
-   por mantener un preprocesamiento único y coherente para los tres modelos.
+   por mantener un preprocesamiento único y coherente para los cuatro modelos (Random Forest es
+   invariante a la escala, así que no se ve afectado).
 4. **Selección por correlación (|r|>0,4):** reduce dimensionalidad y multicolinealidad; especialmente
    beneficioso para KNN (maldición de la dimensionalidad).
 5. **Optimización por *recall*** en `GridSearchCV`: la función objetivo se alinea con minimizar FN, no
@@ -85,5 +95,7 @@ es exactamente el criterio prioritario en oncología.
   **validación cruzada anidada** para estimar el desempeño con intervalos de confianza.
 - **Umbral de decisión fijo en 0,5:** en un despliegue clínico real convendría **bajar el umbral** para
   reducir aún más los FN (a cambio de más FP), y reportar la curva *precision-recall*.
-- **Próximos modelos:** contrastar con SVM y ensambles (Random Forest, Gradient Boosting) y añadir
-  explicabilidad (SHAP) para auditar las predicciones individuales.
+- **Próximos modelos:** ya se incorporó Random Forest; conviene contrastar con SVM y *gradient
+  boosting* (XGBoost/LightGBM), y añadir explicabilidad (SHAP) para auditar predicciones individuales.
+- **Sobre el caso Random Forest:** dado que su baseline superó a la versión optimizada, un próximo paso
+  es validar los hiperparámetros con validación cruzada anidada antes de dar por buena la optimización.

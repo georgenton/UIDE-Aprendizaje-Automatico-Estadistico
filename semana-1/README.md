@@ -10,9 +10,10 @@
 ## Objetivo
 
 Construir un flujo completo de **clasificación binaria supervisada** sobre el dataset *Breast Cancer
-Wisconsin Diagnostic* (WBCD) para distinguir tumores **malignos** de **benignos**, comparando tres
-algoritmos clásicos — **Regresión Logística**, **KNN** y **Naive Bayes** — en versión *baseline* y
-*mejorada* (optimización con `GridSearchCV` + selección de características).
+Wisconsin Diagnostic* (WBCD) para distinguir tumores **malignos** de **benignos**, comparando cuatro
+algoritmos — **Regresión Logística**, **KNN**, **Naive Bayes** y **Random Forest** (este último a
+propuesta del equipo) — en versión *baseline* y *mejorada* (optimización con `GridSearchCV` +
+selección de características).
 
 > **Criterio clínico:** la clase positiva (1) es el tumor **maligno**. La métrica prioritaria es el
 > **Recall (sensibilidad)**, porque el error más grave es el **Falso Negativo** (no detectar un cáncer).
@@ -31,9 +32,10 @@ semana-1/
 ├── notebook/
 │   └── S1_Cancer_Mama_Clasificacion.ipynb   # Notebook completo y ejecutado
 ├── models/
-│   ├── logistic_regression_model.pkl        # Modelos mejorados (joblib)
+│   ├── logistic_regression_model.pkl        # Modelos optimizados (joblib)
 │   ├── knn_model.pkl
-│   └── naive_bayes_model.pkl
+│   ├── naive_bayes_model.pkl
+│   └── random_forest_model.pkl
 ├── data/
 │   └── README.md                            # Instrucciones de descarga (UCI)
 ├── informe/
@@ -67,15 +69,20 @@ Los modelos entrenados se guardan en `models/` y las figuras en `outputs/`.
 | KNN | Mejorado | 0,9649 | 1,0000 | 0,9048 | 0,9500 | 0,9861 |
 | Naive Bayes | Baseline | 0,9211 | 0,9231 | 0,8571 | 0,8889 | 0,9891 |
 | Naive Bayes | Mejorado | 0,9386 | 0,9730 | 0,8571 | 0,9114 | 0,9921 |
+| Random Forest | Baseline | 0,9737 | 1,0000 | 0,9286 | 0,9630 | 0,9929 |
+| Random Forest | Mejorado | 0,9649 | 1,0000 | 0,9048 | 0,9500 | 0,9937 |
 
 **Mejor modelo: Regresión Logística mejorada** (`C=10, solver='saga'`) — mejor Recall y F1 (0,976),
-es decir, la que comete **menos Falsos Negativos**.
+es decir, la que comete **menos Falsos Negativos**. **Random Forest** (propuesta del equipo) queda
+como mejor alternativa, con un hallazgo instructivo: su *baseline* (Recall 0,929) superó a su versión
+optimizada (0,905) en el test, recordando que el óptimo de validación cruzada no siempre transfiere.
 
 ## Análisis adicionales (más allá de lo solicitado)
 
 - Comparación empírica de normalizadores `StandardScaler` vs `MinMaxScaler`.
 - Experimento "eliminar vs conservar atípicos" con justificación clínica.
-- Importancia de características visual (coeficientes de la Regresión Logística).
+- Cuarto algoritmo (**Random Forest**) con doble lectura de importancia: coeficientes (lineal) vs Gini.
+- Análisis crítico del caso *baseline > mejorado* en Random Forest (sobre-optimización en CV).
 - Lectura clínica de los errores (FN/FP) de la matriz de confusión.
 
 📓 [Ver notebook](notebook/S1_Cancer_Mama_Clasificacion.ipynb) · 📄 [Informe ejecutivo](informe/S1_Informe_Interpretacion.md)

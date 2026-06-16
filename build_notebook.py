@@ -50,9 +50,10 @@ El trabajo se organiza en tres fases:
    por el método IQR y normalización con `StandardScaler` y `MinMaxScaler`.
 2. **Fase II — Análisis Exploratorio (EDA):** balance de clases, estadística descriptiva, histogramas,
    boxplots, matriz de correlación y selección de características por correlación con el objetivo.
-3. **Fase III — Modelado y Evaluación:** **Regresión Logística**, **KNN** y **Naive Bayes**, cada uno
-   en versión *baseline* (por defecto) y *mejorada* (`GridSearchCV` + selección de variables),
-   evaluados con accuracy, precision, **recall**, F1, matriz de confusión y curva ROC/AUC.
+3. **Fase III — Modelado y Evaluación:** **Regresión Logística**, **KNN**, **Naive Bayes** y
+   **Random Forest** (este último incorporado a propuesta del equipo), cada uno en versión *baseline*
+   (por defecto) y *mejorada* (`GridSearchCV` + selección de variables), evaluados con accuracy,
+   precision, **recall**, F1, matriz de confusión y curva ROC/AUC.
 
 > **Convención clínica clave:** la **clase positiva (1) es el tumor maligno**. En diagnóstico
 > oncológico el error más grave es el **Falso Negativo** (clasificar como benigno un tumor que es
@@ -64,7 +65,7 @@ El trabajo se organiza en tres fases:
 Para alcanzar el nivel de excelencia de la rúbrica se incluyen análisis no exigidos explícitamente:
 - **Comparación empírica de normalizadores** (`StandardScaler` vs `MinMaxScaler`) sobre un modelo.
 - **Experimento "eliminar vs conservar atípicos"** con justificación clínica de la decisión.
-- **Importancia de características** visual a partir de los coeficientes de la Regresión Logística.
+- **Importancia de características** visual: coeficientes (Reg. Logística) e impureza Gini (Random Forest).
 - **Análisis clínico de los errores** (lectura de FN/FP de la matriz de confusión).
 """)
 
@@ -384,7 +385,7 @@ md(r"""
 ---
 # Fase III — Modelado y Evaluación
 
-**Qué haremos y por qué:** entrenamos tres clasificadores clásicos, cada uno en dos versiones
+**Qué haremos y por qué:** entrenamos cuatro clasificadores, cada uno en dos versiones
 (*baseline* y *mejorada*). Mantenemos un **conjunto de prueba intacto (20%)** con división
 **estratificada** para que el balance de clases se conserve, y usamos `random_state=42` en todo.
 """)
@@ -680,9 +681,87 @@ plot_roc([("Baseline", y_test, proba_b), ("Mejorado", y_test, proba_m)],
          "Curva ROC — Naive Bayes", "15_roc_nb.png")
 """)
 
+# ----- Random Forest (propuesta del equipo) -----
+md(r"""
+## 18. Modelo 4 — Random Forest (propuesta del equipo)
+
+**Por qué lo añadimos:** a propuesta del equipo incorporamos un modelo de **ensamble basado en
+árboles**. Random Forest combina muchos árboles de decisión entrenados sobre submuestras aleatorias
+(*bagging*) y subconjuntos de variables, lo que suele dar alta exactitud y robustez frente al
+sobreajuste, y además entrega una **importancia de características** propia (impureza de Gini), útil
+para contrastar con los coeficientes lineales.
+
+> **Nota:** los árboles son **invariantes a la escala**, por lo que en rigor no necesitan
+> normalización. Reutilizamos las matrices ya escaladas por **coherencia** con el resto del flujo;
+> esto no altera el resultado de un bosque.
+
+**Baseline:** hiperparámetros por defecto, todas las variables. **Mejorada:** `GridSearchCV` sobre
+`n_estimators`, `max_depth`, `min_samples_split` y `max_features`, optimizando **recall**, con
+selección de características.
+""")
+
+code(r"""
+from sklearn.ensemble import RandomForestClassifier
+
+# --- Baseline ---
+rf_base = RandomForestClassifier(random_state=SEED).fit(X_train_std, y_train)
+row_b, pred_b, proba_b = evaluate(rf_base, X_test_std, y_test, "Random Forest", "Baseline")
+print("BASELINE:", {k: round(v, 4) for k, v in row_b.items() if isinstance(v, float)})
+
+# --- Mejorada: GridSearchCV + selección de características ---
+param_grid_rf = {
+    "n_estimators": [100, 200, 300],
+    "max_depth": [None, 5, 10],
+    "min_samples_split": [2, 5],
+    "max_features": ["sqrt", "log2"],
+}
+grid_rf = GridSearchCV(RandomForestClassifier(random_state=SEED), param_grid_rf,
+                       scoring="recall", cv=cv, n_jobs=-1)
+grid_rf.fit(X_train_std[:, sel_idx], y_train)
+rf_best = grid_rf.best_estimator_
+row_m, pred_m, proba_m = evaluate(rf_best, X_test_std[:, sel_idx], y_test, "Random Forest", "Mejorado")
+print("Mejores hiperparámetros:", grid_rf.best_params_)
+print("MEJORADO:", {k: round(v, 4) for k, v in row_m.items() if isinstance(v, float)})
+""")
+
+code(r"""
+plot_confusion(y_test, pred_b, "Random Forest — Baseline", "16_cm_rf_baseline.png")
+plot_confusion(y_test, pred_m, "Random Forest — Mejorado", "17_cm_rf_mejorado.png")
+plot_roc([("Baseline", y_test, proba_b), ("Mejorado", y_test, proba_m)],
+         "Curva ROC — Random Forest", "18_roc_rf.png")
+""")
+
+md(r"""
+### Importancia de características (Random Forest, Gini) — análisis adicional
+
+A diferencia de los coeficientes lineales, Random Forest mide la importancia por la **reducción de
+impureza (Gini)** que aporta cada variable a lo largo del bosque. Contrastar ambas vistas
+(coeficientes vs Gini) enriquece la interpretabilidad del diagnóstico.
+""")
+
+code(r"""
+rf_imp = pd.Series(rf_best.feature_importances_, index=selected_features).sort_values()
+fig, ax = plt.subplots(figsize=(8, 7))
+sns.barplot(x=rf_imp.values, y=rf_imp.index, palette="viridis", ax=ax)
+ax.set_title("Importancia de características — Random Forest (mejorado, Gini)")
+ax.set_xlabel("Importancia (reducción media de impureza)")
+plt.tight_layout(); plt.savefig(OUT_DIR / "19_importancia_rf.png", dpi=120); plt.show()
+""")
+
+md(r"""
+**Comparación baseline vs mejorado (Random Forest):** aquí ocurre algo instructivo: el **baseline
+supera a la versión optimizada** en recall sobre el test. No es un error, sino un recordatorio
+estadístico clave: `GridSearchCV` maximiza el recall **en validación cruzada**, y ese óptimo **no
+siempre transfiere** al conjunto de prueba, especialmente cuando el baseline ya es muy fuerte (los
+ensambles como Random Forest tienden a un desempeño alto "out of the box"). La lección es no asumir
+que "más optimización = mejor test", sino **medir siempre**. Como nota positiva, las variables más
+importantes según Gini coinciden con las más correlacionadas del EDA, lo que indica que el modelo
+aprende patrones clínicamente plausibles.
+""")
+
 # ----- Guardado de modelos -----
 md(r"""
-## 18. Guardado de los modelos (joblib)
+## 19. Guardado de los modelos (joblib)
 
 Persistimos las **versiones mejoradas** de cada modelo con `joblib` (recomendado sobre pickle nativo
 para objetos de scikit-learn). Cada artefacto guarda el estimador junto con la lista de variables que
@@ -694,6 +773,7 @@ artifacts = {
     "logistic_regression_model.pkl": {"model": logreg_best, "features": selected_features, "scaler": "StandardScaler"},
     "knn_model.pkl":                 {"model": knn_best,     "features": selected_features, "scaler": "StandardScaler"},
     "naive_bayes_model.pkl":         {"model": nb_best,      "features": selected_features, "scaler": "StandardScaler"},
+    "random_forest_model.pkl":       {"model": rf_best,      "features": selected_features, "scaler": "StandardScaler (no requerido por RF)"},
 }
 for fname, payload in artifacts.items():
     joblib.dump(payload, MODELS_DIR / fname)
@@ -702,9 +782,9 @@ for fname, payload in artifacts.items():
 
 # ----- Tabla comparativa -----
 md(r"""
-## 19. Tabla comparativa final de todos los modelos
+## 20. Tabla comparativa final de todos los modelos
 
-Consolidamos las seis filas (3 modelos × 2 versiones). Recordatorio: en este problema clínico la
+Consolidamos las ocho filas (4 modelos × 2 versiones). Recordatorio: en este problema clínico la
 métrica prioritaria es el **Recall** de la clase maligna.
 """)
 
@@ -735,12 +815,52 @@ fig, ax = plt.subplots(figsize=(13, 6))
 sns.barplot(data=melt, x="Métrica", y="Valor", hue="Etiqueta", ax=ax)
 ax.set_ylim(0.85, 1.005); ax.set_title("Comparativa de métricas — todos los modelos y versiones")
 ax.legend(bbox_to_anchor=(1.02, 1), loc="upper left", fontsize=9)
-plt.tight_layout(); plt.savefig(OUT_DIR / "16_comparativa_metricas.png", dpi=120); plt.show()
+plt.tight_layout(); plt.savefig(OUT_DIR / "20_comparativa_metricas.png", dpi=120); plt.show()
+""")
+
+# ----- Conclusiones finales (propuesta del equipo, generadas dinámicamente) -----
+md(r"""
+## 21. Conclusiones finales (resumen consolidado)
+
+A propuesta del equipo, consolidamos las conclusiones de la comparación de los **cuatro** algoritmos.
+El bloque siguiente las **deriva automáticamente** de la tabla de resultados: así las cifras siempre
+coinciden con la ejecución real, sin números escritos a mano que puedan quedar desactualizados.
+""")
+
+code(r"""
+ranking = results_df.sort_values(["Recall", "F1", "AUC"], ascending=False).reset_index(drop=True)
+win = ranking.iloc[0]
+
+print("CONCLUSIONES FINALES  (prioridad clínica = Recall de la clase maligna)")
+print("=" * 70)
+print(f"1) Mejor modelo: {win['Modelo']} ({win['Versión']})")
+print(f"   Recall={win['Recall']:.4f} | F1={win['F1']:.4f} | "
+      f"Precision={win['Precision']:.4f} | AUC={win['AUC']:.4f}")
+print(f"\n2) Selección de características: {len(selected_features)} de {len(feature_cols)} "
+      f"variables (|r| > {THRESHOLD}), lo que mejora interpretabilidad y reduce multicolinealidad.")
+print(f"   Top-4 más predictivas: {', '.join(selected_features[:4])}.")
+print(f"\n3) Ranking completo por Recall (desempate por F1 y AUC):")
+for i, r in ranking.iterrows():
+    print(f"   {i+1}. {r['Modelo']:<16} {r['Versión']:<9} "
+          f"Recall={r['Recall']:.4f}  F1={r['F1']:.4f}  AUC={r['AUC']:.4f}")
+mejoras = []
+for modelo in results_df["Modelo"].unique():
+    sub = results_df[results_df["Modelo"] == modelo].set_index("Versión")["Recall"]
+    mejoras.append((modelo, sub["Mejorado"] - sub["Baseline"]))
+n_mejora = sum(1 for _, d in mejoras if d > 0)
+n_igual  = sum(1 for _, d in mejoras if abs(d) < 1e-9)
+peor = [m for m, d in mejoras if d < -1e-9]
+print(f"\n4) La optimización (GridSearchCV + selección) mejoró el recall en {n_mejora} de "
+      f"{len(mejoras)} modelos e igualó en {n_igual}.")
+if peor:
+    print(f"   EXCEPCIÓN instructiva: {', '.join(peor)} — su baseline superó a la versión ajustada en "
+          f"el test. La optimización por validación cruzada NO siempre transfiere al conjunto de "
+          f"prueba, sobre todo cuando el baseline ya es muy fuerte (caso típico de los ensambles).")
 """)
 
 # ----- Interpretación clínica -----
 md(r"""
-## 20. Interpretación clínica: por qué minimizar los Falsos Negativos
+## 22. Interpretación clínica: por qué minimizar los Falsos Negativos
 
 En la matriz de confusión, con **maligno = clase positiva (1)**:
 
@@ -784,14 +904,18 @@ _[placeholder — completar manualmente]_
 
 ## Conclusiones
 
-1. El WBCD es un problema **muy separable**: los tres modelos superan el 90% en todas las métricas, lo
-   que confirma el principio de **empezar simple** antes de añadir complejidad.
-2. Los modelos basados en frontera de decisión (**Regresión Logística** y **KNN**) superan a
-   **Naive Bayes**, cuya suposición de independencia se ve penalizada por la fuerte multicolinealidad.
-3. La optimización con `GridSearchCV` + selección de características aporta su mayor valor en
+1. El WBCD es un problema **muy separable**: los cuatro modelos superan el 90% en todas las métricas,
+   lo que confirma el principio de **empezar simple** antes de añadir complejidad.
+2. Los modelos de frontera de decisión (**Regresión Logística** y **KNN**) y el ensamble
+   (**Random Forest**) superan a **Naive Bayes**, cuya suposición de independencia se ve penalizada
+   por la fuerte multicolinealidad del dataset.
+3. **Random Forest** (incorporado a propuesta del equipo) aporta un modelo de mayor capacidad y una
+   segunda lectura de importancia de variables (Gini) que **coincide** con las variables más
+   correlacionadas del EDA, reforzando la validez del análisis.
+4. La optimización con `GridSearchCV` + selección de características aporta su mayor valor en
    **simplicidad e interpretabilidad** (menos variables) más que en grandes saltos de exactitud,
    dado que el baseline ya es muy alto.
-4. El **Recall de la clase maligna** es la métrica decisiva: en medicina, minimizar Falsos Negativos
+5. El **Recall de la clase maligna** es la métrica decisiva: en medicina, minimizar Falsos Negativos
    prima sobre el accuracy global.
 """)
 

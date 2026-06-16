@@ -5,3 +5,5 @@ KNN,Baseline,0.9561,0.9744,0.9048,0.9383,0.9823
 KNN,Mejorado,0.9649,1.0,0.9048,0.95,0.9861
 Naive Bayes,Baseline,0.9211,0.9231,0.8571,0.8889,0.9891
 Naive Bayes,Mejorado,0.9386,0.973,0.8571,0.9114,0.9921
+Random Forest,Baseline,0.9737,1.0,0.9286,0.963,0.9929
+Random Forest,Mejorado,0.9649,1.0,0.9048,0.95,0.9937

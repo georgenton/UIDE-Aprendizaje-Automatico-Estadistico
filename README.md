@@ -34,7 +34,10 @@ Clase positiva = tumor **maligno**; métrica prioritaria = **Recall** (minimizar
 | KNN | Mejorado | 0,9649 | 1,0000 | 0,9048 | 0,9500 | 0,9861 |
 | Naive Bayes | Baseline | 0,9211 | 0,9231 | 0,8571 | 0,8889 | 0,9891 |
 | Naive Bayes | Mejorado | 0,9386 | 0,9730 | 0,8571 | 0,9114 | 0,9921 |
+| Random Forest | Baseline | 0,9737 | 1,0000 | 0,9286 | 0,9630 | 0,9929 |
+| Random Forest | Mejorado | 0,9649 | 1,0000 | 0,9048 | 0,9500 | 0,9937 |
 
-**Ganador:** Regresión Logística mejorada (mejor Recall y F1 = 0,976).
+**Ganador:** Regresión Logística mejorada (mejor Recall y F1 = 0,976). **Random Forest** (propuesta del
+equipo) es la mejor alternativa; curiosamente su *baseline* superó a su versión optimizada en el test.
 
 ➡️ Detalle completo en [`semana-1/`](semana-1/README.md).
