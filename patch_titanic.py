@@ -68,41 +68,8 @@ replace_in_cell("Tabla comparativa", "Consolidamos las seis filas (3 modelos × 
 replace_in_cell("comparativa_metricas", "t17_comparativa_metricas.png",
                 "t21_comparativa_metricas.png")
 
-# Observación de la tabla: al añadir RF, el mejor por F1 pasa a ser RF baseline (antes KNN baseline).
-replace_in_cell(
-    "Observación honesta",
-    "> **Observación honesta:** el mejor desempeño en el test lo da el **KNN baseline**; ninguna versión\n"
-    "> *mejorada* supera a su *baseline* en esta partición. Se discute por qué en las Conclusiones.\n"
-    "\n"
-    "**Observación:** el mejor desempeño en el test lo da el **KNN baseline**; ninguna versión\n"
-    "*mejorada* supera a su *baseline* en esta partición. Se discute por qué en las Conclusiones.",
-    "> **Observación honesta:** el mejor desempeño en el test se lo reparten dos *baselines* casi\n"
-    "> empatados: **Random Forest baseline** (mejor **F1 = 0.750**, la métrica que priorizamos) y\n"
-    "> **KNN baseline** (mejor Accuracy = 0.816 y AUC). **Ninguna versión *mejorada* supera a su\n"
-    "> *baseline*** en esta partición. Se discute por qué en las Conclusiones.",
-)
-
-# Conclusiones: incluir RF entre los que superan a NB, y actualizar el "mejor modelo".
-replace_in_cell(
-    "Dataset más difícil",
-    "4. **Regresión Logística y KNN** superan a **Naive Bayes**, cuyo supuesto de independencia y\n"
-    "   normalidad se ve penalizado por las variables categóricas/discretas del Titanic.",
-    "4. **Regresión Logística, KNN y Random Forest** superan a **Naive Bayes**, cuyo supuesto de\n"
-    "   independencia y normalidad se ve penalizado por las variables categóricas/discretas del Titanic.",
-)
-replace_in_cell(
-    "Dataset más difícil",
-    "5. **La versión *mejorada* no superó al *baseline* en el test.** El mejor modelo fue **KNN baseline**\n"
-    "   (F1=0.748, Accuracy=0.816). Es un resultado legítimo y esperable: con pocas variables y señal débil,\n"
-    "   el baseline ya opera cerca del techo del problema, y ni el ajuste de hiperparámetros ni la selección\n"
-    "   de características transfieren mejora a esta partición.",
-    "5. **La versión *mejorada* no superó al *baseline* en ninguno de los cuatro modelos.** Por F1 (la\n"
-    "   métrica priorizada) el mejor fue **Random Forest baseline** (F1=0.750, el 4º modelo propuesto por\n"
-    "   el equipo), seguido muy de cerca por **KNN baseline** (F1=0.748, y el mejor en Accuracy=0.816 y\n"
-    "   AUC): están prácticamente empatados. Es un resultado legítimo y esperable: con pocas variables y\n"
-    "   señal débil, el baseline ya opera cerca del techo del problema, y ni el ajuste de hiperparámetros\n"
-    "   ni la selección de características transfieren mejora a esta partición.",
-)
+# NOTA: la conclusión y la observación del autor original se dejan INTACTAS (a pedido del equipo).
+# Más abajo se inserta una celda de NOTA con la sugerencia, sin modificar su texto.
 
 # Artefacto RF en el dict de guardado
 replace_in_cell(
@@ -255,6 +222,18 @@ nb.cells[i_nb_plots + 1:i_nb_plots + 1] = rf_cells
 # Conclusiones finales: después de la celda del gráfico comparativo (t21_comparativa_metricas.png)
 i_comp = index_of("t21_comparativa_metricas.png")
 nb.cells[i_comp + 1:i_comp + 1] = conclu_cells
+
+# Nota de sugerencia: justo DESPUÉS de la conclusión del autor (sin modificar su texto)
+nota_cell = md(r"""
+> **Nota del equipo (añadida al integrar Random Forest):** la conclusión anterior se mantiene **tal
+> como la redactó su autor**. A modo de **sugerencia**, conviene matizar que —al sumar el 4.º modelo—
+> **Random Forest baseline** obtiene el mejor **F1 (0,750)**, por delante por muy poco del **KNN
+> baseline (0,748)**; KNN baseline sigue siendo el mejor en **Accuracy (0,816)** y **AUC**. La idea de
+> fondo del autor —que **ninguna versión mejorada supera a su baseline**— se mantiene plenamente
+> válida. El ranking consolidado por F1 está en la sección *"Conclusiones finales"*.
+""")
+i_conc = index_of("Dataset más difícil")
+nb.cells[i_conc + 1:i_conc + 1] = [nota_cell]
 
 nbf.write(nb, NB_PATH)
 print(f"Notebook parcheado: {NB_PATH} ({len(nb.cells)} celdas)")
