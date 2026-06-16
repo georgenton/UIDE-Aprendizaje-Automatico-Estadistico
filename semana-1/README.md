@@ -1,4 +1,4 @@
-# Semana 1 — Clasificación de Cáncer de Mama (WBCD): Regresión Logística, KNN y Naive Bayes
+# Semana 1 — Clasificación supervisada: Cáncer de Mama (WBCD) y Titanic
 
 **Práctica grupal — Semana 1**
 **Materia:** Aprendizaje Automático Estadístico — MIA-B
@@ -9,38 +9,39 @@
 
 ## Objetivo
 
-Construir un flujo completo de **clasificación binaria supervisada** sobre el dataset *Breast Cancer
-Wisconsin Diagnostic* (WBCD) para distinguir tumores **malignos** de **benignos**, comparando cuatro
-algoritmos — **Regresión Logística**, **KNN**, **Naive Bayes** y **Random Forest** (este último a
-propuesta del equipo) — en versión *baseline* y *mejorada* (optimización con `GridSearchCV` +
-selección de características).
+La entrega comprende **dos notebooks** de clasificación binaria supervisada, cada uno comparando cuatro
+algoritmos — **Regresión Logística**, **KNN**, **Naive Bayes** y **Random Forest** — en versión
+*baseline* y *mejorada* (`GridSearchCV` + selección de características):
 
-> **Criterio clínico:** la clase positiva (1) es el tumor **maligno**. La métrica prioritaria es el
-> **Recall (sensibilidad)**, porque el error más grave es el **Falso Negativo** (no detectar un cáncer).
+1. **Cáncer de Mama (WBCD):** distinguir tumores **malignos** de **benignos** (dataset clínico curado).
+2. **Titanic:** predecir la **supervivencia** de los pasajeros (dataset "sucio": nulos, categóricas,
+   *feature engineering*), que aporta el contraste de un problema más difícil y menos separable.
 
-## Dataset
+Ambos comparten el mismo formato, funciones de evaluación y criterios de preprocesamiento.
 
-- **Fuente:** [Breast Cancer Wisconsin Diagnostic — UCI](http://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic) (vía `sklearn.datasets.load_breast_cancer()`)
-- **Muestras:** 569 (357 benignos / 212 malignos)
-- **Variables:** 30 características morfológicas numéricas
-- **Valores perdidos:** 0 · **Atípicos IQR:** 171 filas (30,1%, conservados)
+> **Criterio de métrica:** en cáncer la prioridad es el **Recall** (minimizar Falsos Negativos, no
+> dejar pasar un maligno); en Titanic, donde los costos de error son más simétricos, se prioriza el
+> **F1**.
+
+## Datasets
+
+- **WBCD:** [Breast Cancer Wisconsin Diagnostic — UCI](http://archive.ics.uci.edu/dataset/17/breast+cancer+wisconsin+diagnostic) (vía `sklearn.datasets.load_breast_cancer()`). 569 muestras (357 benignos / 212 malignos), 30 variables, 0 nulos.
+- **Titanic:** dataset clásico de Kaggle (`titanic_train.csv` en `data/`). 891 pasajeros (549 no sobrevivieron / 342 sí), 12 columnas originales con nulos en `Age`, `Cabin` y `Embarked`.
 
 ## Estructura
 
 ```
 semana-1/
 ├── notebook/
-│   └── S1_Cancer_Mama_Clasificacion.ipynb   # Notebook completo y ejecutado
-├── models/
-│   ├── logistic_regression_model.pkl        # Modelos optimizados (joblib)
-│   ├── knn_model.pkl
-│   ├── naive_bayes_model.pkl
-│   └── random_forest_model.pkl
+│   ├── S1_Cancer_Mama_Clasificacion.ipynb   # Notebook WBCD (ejecutado)
+│   └── S1_Titanic_Clasificacion.ipynb        # Notebook Titanic (ejecutado)
+├── models/                                    # 8 modelos optimizados (joblib): 4 WBCD + 4 titanic_*
 ├── data/
-│   └── README.md                            # Instrucciones de descarga (UCI)
+│   ├── README.md                             # Instrucciones de descarga (UCI)
+│   └── titanic_train.csv                     # Dataset Titanic
 ├── informe/
-│   └── S1_Informe_Interpretacion.md         # Informe ejecutivo
-├── outputs/                                  # Figuras generadas (.png) + CSV de resultados
+│   └── S1_Informe_Interpretacion.md          # Informe ejecutivo (WBCD)
+├── outputs/                                   # Figuras (.png) + CSV de resultados (WBCD y t* Titanic)
 └── README.md
 ```
 
@@ -59,7 +60,7 @@ jupyter nbconvert --to notebook --execute --inplace S1_Cancer_Mama_Clasificacion
 
 Los modelos entrenados se guardan en `models/` y las figuras en `outputs/`.
 
-## Resultados
+## Resultados — Cáncer de Mama (WBCD)
 
 | Modelo | Versión | Accuracy | Precision | Recall | F1 | AUC |
 |--------|---------|:--------:|:---------:|:------:|:--:|:---:|
@@ -77,6 +78,26 @@ es decir, la que comete **menos Falsos Negativos**. **Random Forest** (propuesta
 como mejor alternativa, con un hallazgo instructivo: su *baseline* (Recall 0,929) superó a su versión
 optimizada (0,905) en el test, recordando que el óptimo de validación cruzada no siempre transfiere.
 
+## Resultados — Titanic
+
+Dataset más difícil (señal más débil): las métricas son más bajas y la **prioridad es F1**.
+
+| Modelo | Versión | Accuracy | Precision | Recall | F1 | AUC |
+|--------|---------|:--------:|:---------:|:------:|:--:|:---:|
+| Reg. Logística | Baseline | 0,8045 | 0,7833 | 0,6812 | 0,7287 | 0,8513 |
+| Reg. Logística | Mejorado | 0,7765 | 0,7164 | 0,6957 | 0,7059 | 0,8171 |
+| KNN | Baseline | 0,8156 | 0,7903 | 0,7101 | 0,7481 | 0,8498 |
+| KNN | Mejorado | 0,7709 | 0,7333 | 0,6377 | 0,6822 | 0,7924 |
+| Naive Bayes | Baseline | 0,7821 | 0,7143 | 0,7246 | 0,7194 | 0,8194 |
+| Naive Bayes | Mejorado | 0,7598 | 0,6857 | 0,6957 | 0,6906 | 0,7904 |
+| **Random Forest** | **Baseline** | 0,8101 | 0,7612 | 0,7391 | **0,7500** | 0,8291 |
+| Random Forest | Mejorado | 0,7821 | 0,7206 | 0,7101 | 0,7153 | 0,8198 |
+
+**Mejor modelo: Random Forest baseline** (F1 = 0,750), seguido muy de cerca por **KNN baseline**
+(F1 = 0,748; mejor Accuracy y AUC) — prácticamente empatados. Hallazgo consistente con el de cáncer:
+**ninguna versión mejorada superó a su baseline** en el test, porque con pocas variables y señal débil
+el baseline ya opera cerca del techo del problema.
+
 ## Análisis adicionales (más allá de lo solicitado)
 
 - Comparación empírica de normalizadores `StandardScaler` vs `MinMaxScaler`.
@@ -84,5 +105,7 @@ optimizada (0,905) en el test, recordando que el óptimo de validación cruzada 
 - Cuarto algoritmo (**Random Forest**) con doble lectura de importancia: coeficientes (lineal) vs Gini.
 - Análisis crítico del caso *baseline > mejorado* en Random Forest (sobre-optimización en CV).
 - Lectura clínica de los errores (FN/FP) de la matriz de confusión.
+- Segundo dataset (**Titanic**) con *feature engineering* (`FamilySize`, `IsAlone`) y contraste
+  fácil vs difícil entre ambos problemas.
 
-📓 [Ver notebook](notebook/S1_Cancer_Mama_Clasificacion.ipynb) · 📄 [Informe ejecutivo](informe/S1_Informe_Interpretacion.md)
+📓 [Notebook WBCD](notebook/S1_Cancer_Mama_Clasificacion.ipynb) · 📓 [Notebook Titanic](notebook/S1_Titanic_Clasificacion.ipynb) · 📄 [Informe ejecutivo](informe/S1_Informe_Interpretacion.md)

@@ -12,7 +12,7 @@ Repositorio del **componente práctico** de la asignatura *Aprendizaje Automáti
 
 | Semana | Tema | Estado |
 |:------:|------|:------:|
-| [Semana 1](semana-1/) | Clasificación de cáncer de mama (WBCD): Regresión Logística, KNN y Naive Bayes | ✅ |
+| [Semana 1](semana-1/) | Clasificación supervisada — Cáncer de Mama (WBCD) y Titanic: Reg. Logística, KNN, Naive Bayes y Random Forest | ✅ |
 
 ## Entorno
 
@@ -23,8 +23,12 @@ pip install -r requirements.txt
 
 ## Semana 1 — Resumen de resultados
 
-Clasificación binaria sobre el *Breast Cancer Wisconsin Diagnostic* (569 muestras, 30 variables).
-Clase positiva = tumor **maligno**; métrica prioritaria = **Recall** (minimizar Falsos Negativos).
+Dos notebooks de clasificación binaria, cada uno con 4 algoritmos (baseline + mejorado).
+
+### Cáncer de Mama (WBCD)
+
+569 muestras, 30 variables. Clase positiva = tumor **maligno**; métrica prioritaria = **Recall**
+(minimizar Falsos Negativos).
 
 | Modelo | Versión | Accuracy | Precision | Recall | F1 | AUC |
 |--------|---------|:--------:|:---------:|:------:|:--:|:---:|
@@ -39,5 +43,22 @@ Clase positiva = tumor **maligno**; métrica prioritaria = **Recall** (minimizar
 
 **Ganador:** Regresión Logística mejorada (mejor Recall y F1 = 0,976). **Random Forest** (propuesta del
 equipo) es la mejor alternativa; curiosamente su *baseline* superó a su versión optimizada en el test.
+
+### Titanic
+
+891 pasajeros. Dataset "sucio" (nulos, categóricas, *feature engineering*) y más difícil; métrica
+prioritaria = **F1** (costos de error simétricos).
+
+| Modelo | Versión | Accuracy | Precision | Recall | F1 | AUC |
+|--------|---------|:--------:|:---------:|:------:|:--:|:---:|
+| Reg. Logística | Baseline | 0,8045 | 0,7833 | 0,6812 | 0,7287 | 0,8513 |
+| KNN | Baseline | 0,8156 | 0,7903 | 0,7101 | 0,7481 | 0,8498 |
+| Naive Bayes | Baseline | 0,7821 | 0,7143 | 0,7246 | 0,7194 | 0,8194 |
+| **Random Forest** | **Baseline** | 0,8101 | 0,7612 | 0,7391 | **0,7500** | 0,8291 |
+
+*(se muestran los baselines, los mejores; ver tabla completa de 8 filas en [`semana-1/`](semana-1/README.md))*
+
+**Ganador:** Random Forest baseline (F1 = 0,750) ≈ KNN baseline (F1 = 0,748). Aquí **ninguna versión
+mejorada superó al baseline**, coherente con un problema de señal débil.
 
 ➡️ Detalle completo en [`semana-1/`](semana-1/README.md).
