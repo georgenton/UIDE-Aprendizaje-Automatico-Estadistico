@@ -108,4 +108,4 @@ el baseline ya opera cerca del techo del problema.
 - Segundo dataset (**Titanic**) con *feature engineering* (`FamilySize`, `IsAlone`) y contraste
   fácil vs difícil entre ambos problemas.
 
-📓 [Notebook WBCD](notebook/S1_Cancer_Mama_Clasificacion.ipynb) · 📓 [Notebook Titanic](notebook/S1_Titanic_Clasificacion.ipynb) · 📄 [Informe ejecutivo](informe/S1_Informe_Interpretacion.md)
+📓 [Notebook WBCD](notebook/S1_Cancer_Mama_Clasificacion.ipynb) · 📓 [Notebook Titanic](notebook/S1_Titanic_Clasificacion.ipynb) · 📄 [Informe ejecutivo](informe/S1_Informe_Interpretacion.md) · 🧩 [Notas de integración](NOTAS_INTEGRACION.md)
