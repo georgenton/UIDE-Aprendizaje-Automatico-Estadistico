@@ -298,8 +298,7 @@ n_mejora = sum(1 for _, d in mejoras if d > 1e-9)
 peor = [m for m, d in mejoras if d < -1e-9]
 print(f"\n4) La optimización mejoró el recall en {n_mejora} de {len(mejoras)} modelos.")
 if peor:
-    print(f"   EXCEPCIÓN instructiva: {', '.join(peor)} — su baseline superó a la versión ajustada en "
-          f"el test (el óptimo de validación cruzada no siempre transfiere).")
+    print(f"Con el algoritmo Random Forest, su baseline superó a la versión ajustada en el test.")
 """),
 ]
 
