@@ -13,19 +13,23 @@ Raúl reenvió una versión del notebook de cáncer con cambios respecto al que 
 compararlos celda por celda se identificaron **tres tipos de cambios**, y se actuó distinto con cada
 uno:
 
-### a) Reescrituras de estilo → **NO se adoptaron** (se mantuvo la versión previa)
+> **Actualización (decisión final del equipo):** se decidió **adoptar la redacción de Raúl como base**
+> del notebook de cáncer, corrigiendo únicamente erratas y cifras. Esta sección documenta cómo se hizo.
+> El notebook se genera ahora con `patch_cancer.py` (toma el `.ipynb` de Raúl y le aplica los ajustes).
+
+### a) Reescrituras de estilo → **se adoptaron, corrigiendo erratas y gramática**
 
 La mayoría de sus cambios eran reescrituras de la redacción (acortar párrafos, quitar el encuadre
-"*Qué haremos y por qué*"). El problema es que varias de esas reescrituras:
+"*Qué haremos y por qué*"). **Se respetó su estilo**, corrigiendo solo lo que estaba mal escrito:
 
-- **introducían erratas** (p. ej. *"anteriro"*, *"los 30 características"*), y
-- **eliminaban contenido con valor para la rúbrica**, en particular la **tabla de interpretación
-  clínica de los errores (FN/FP)** y la sección de **Conclusiones** detallada.
+- erratas (*"anteriro"* → "anterior"; *"los 30 características"* → "las 30"; *"Analisis"* → "Análisis"),
+- frases con gramática rota (la introducción de la Fase II: *"entender… nos permite"*), y
+- una imprecisión conceptual (*"no vamos a quitar ninguna característica"* → "no eliminamos ninguna
+  **fila**", que es lo correcto en el experimento de atípicos).
 
-**Por qué se mantuvieron las secciones originales:** la rúbrica premia la **argumentación y el
-pensamiento crítico** y el ir *más allá de lo solicitado*. Quitar la lectura clínica de los Falsos
-Negativos —el corazón del razonamiento médico del trabajo— habría restado puntos. Por eso se conservó
-la narrativa más completa y sin erratas.
+**Sobre la interpretación clínica FN/FP:** Raúl la había eliminado. Se **conservó** (sección 21) por
+ser análisis sustantivo que premia la rúbrica, pero marcada con una nota para que el equipo decida si
+retirarla y quedarse con la versión más breve de Raúl.
 
 ### b) Su aporte de fondo: una sección de "Conclusiones finales" → **se integró, pero corregida**
 
@@ -41,10 +45,10 @@ ejecución real** del notebook:
 
 **Por qué se cambiaron los datos de las conclusiones:** entregar conclusiones con números que no
 salen del propio notebook es un error grave de coherencia (la rúbrica evalúa explícitamente la
-**coherencia entre secciones**). En lugar de copiar cifras escritas a mano —que además se
-desactualizan en cuanto se reejecuta—, la sección de **"Conclusiones finales" se generó de forma
-automática a partir de la tabla de resultados** (`results_df`). Así las cifras **siempre** reflejan la
-ejecución real, sin posibilidad de divergencia.
+**coherencia entre secciones**). Se **conservó la redacción de las conclusiones de Raúl** pero con las
+**cifras corregidas**, y **además** se añadió debajo un **bloque de "ranking consolidado" generado
+automáticamente** desde `results_df`: así la narrativa es la de Raúl y las cifras quedan verificadas
+contra la ejecución real, sin posibilidad de divergencia.
 
 ### c) Cambió "tres" → "cuatro" algoritmos (anticipando Random Forest)
 
@@ -81,10 +85,11 @@ bastó con una nota aclaratoria respetando su redacción.
 
 | Situación | Acción |
 |---|---|
-| Texto del compañero **correcto** | Se mantiene tal cual |
-| Reescritura que **introduce erratas o quita contenido valioso** | No se adopta; se conserva la versión más completa |
-| Cifras que **contradicen la ejecución real** | Se corrigen (idealmente generándolas de forma automática) |
-| Diferencia que es solo un **matiz/empate** | Se respeta el texto y se añade una **nota** |
+| Texto/redacción del compañero | **Se adopta**, respetando su estilo |
+| Erratas o gramática rota dentro de esa redacción | Se **corrigen** (mínimo necesario) |
+| Cifras que **contradicen la ejecución real** | Se corrigen; cuando es posible, se respaldan con un bloque generado automáticamente |
+| Contenido analítico que el compañero eliminó (p. ej. FN/FP) | Se **conserva marcado**, para que el equipo decida |
+| Diferencia que es solo un **matiz/empate** (Titanic) | Se respeta el texto y se añade una **nota** |
 
 > Estas decisiones son **propuestas de integración**, no imposiciones. Conviene revisarlas en equipo
 > antes de la entrega final.

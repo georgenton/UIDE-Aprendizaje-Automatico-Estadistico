@@ -1,4 +1,9 @@
 """
+[HISTÓRICO — NO RE-EJECUTAR] Generador original del notebook de cáncer (redacción del equipo).
+A partir de la decisión de adoptar la redacción de Raúl, el notebook se genera ahora con
+`patch_cancer.py` (base = notebook de Raúl). Re-ejecutar este archivo SOBREESCRIBIRÍA esa versión.
+Se conserva solo como referencia.
+
 Constructor del notebook S1_Cancer_Mama_Clasificacion.ipynb
 Materia: Aprendizaje Automatico Estadistico (MIA-B, UIDE) - Semana 1
 Genera el .ipynb con nbformat. Luego se ejecuta con nbconvert --execute.
