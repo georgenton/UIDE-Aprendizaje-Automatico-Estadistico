@@ -24,6 +24,50 @@ def replace_in_cell(marker, old, new, required=True):
     return False
 
 
+def set_cell(marker, new_source):
+    for c in nb.cells:
+        if marker in "".join(c["source"]):
+            c["source"] = new_source.strip("\n")
+            return True
+    raise SystemExit(f"set_cell: no encontrado {marker!r}")
+
+
+# Aplicación Profesional — reflexiones reales de los 3 integrantes (idéntico en ambos notebooks)
+APLICACION = r"""
+---
+## 🔧 Aplicación Profesional — Learning by Doing
+
+> *Cada integrante del equipo describe en 2-3 líneas cómo aplicaría los contenidos de esta semana en su
+> entorno laboral o proyecto de titulación.*
+
+**Jorge Armando Quizamánchuro Fuel:**
+En mi plataforma SaaS de psicoeducación, este flujo de clasificación binaria con priorización del
+recall es directamente aplicable a un *screening* de riesgo psicológico: igual que aquí el Falso
+Negativo (no detectar un maligno) es el error crítico, en salud mental no detectar a un usuario en
+riesgo es el error que más debemos minimizar. La selección de características por correlación y la
+comparación baseline vs mejorado me dan un marco reproducible para construir modelos interpretables y
+auditables sobre datos de cuestionarios de bienestar.
+
+**Jonathan Fabricio Gualli Ramírez:**
+Desde mi lado de DevOps/desarrollo, lo que me quedó claro esta semana es que el modelo no acaba en el
+`.fit()`: acaba cuando se puede reproducir y desplegar. Que fijar `random_state` dé siempre el mismo
+resultado es lo mismo que busco en un *build* de CI/CD, y guardar el modelo en `.pkl` es tener un
+artefacto que puedo meter en una API y versionar. La idea de baseline vs mejorado me sirve como un
+filtro de calidad: solo sube la versión que mejora. Me veo automatizando este ciclo con un pipeline
+simple de MLOps en mi trabajo.
+
+**Raúl Marcelo Salazar Gamboa:**
+En mi ámbito profesional, el desarrollo de nuevos productos bancarios, puedo aplicar la regresión
+logística para mejorar los sistemas de puntuación (*scoring*) de cuentas colectoras, estatales y
+corrientes, mejorando la precisión en la evaluación del perfil de riesgo de los clientes jurídicos e
+institucionales. Esto permitirá optimizar la predictibilidad de comportamientos inusuales, mitigar el
+riesgo de contraparte y agilizar los tiempos de aprobación mediante un modelo automatizado, robusto y
+fácilmente auditable por los entes reguladores.
+
+---
+"""
+
+
 # ---------------------------------------------------------------
 # 1) Rutas alineadas al esquema de cáncer
 # ---------------------------------------------------------------
@@ -86,6 +130,9 @@ replace_in_cell("Tabla comparativa", "## 21. Tabla comparativa final de todos lo
                 "## 22. Tabla comparativa final de todos los modelos")
 replace_in_cell("¿qué error priorizar", "## 22. Interpretación: ¿qué error priorizar en el Titanic?",
                 "## 24. Interpretación: ¿qué error priorizar en el Titanic?")
+
+# Aplicación Profesional con las reflexiones reales de los 3 integrantes
+set_cell("Aplicación Profesional", APLICACION)
 
 # ---------------------------------------------------------------
 # 3) Construcción de celdas nuevas

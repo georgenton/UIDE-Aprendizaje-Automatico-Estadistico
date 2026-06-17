@@ -145,6 +145,44 @@ set_cell("## Conclusiones finales", r"""
 """)
 
 # ===============================================================
+# 3b) APLICACIÓN PROFESIONAL — reflexiones reales de los 3 integrantes
+# ===============================================================
+APLICACION = r"""
+---
+## 🔧 Aplicación Profesional — Learning by Doing
+
+> *Cada integrante del equipo describe en 2-3 líneas cómo aplicaría los contenidos de esta semana en su
+> entorno laboral o proyecto de titulación.*
+
+**Jorge Armando Quizamánchuro Fuel:**
+En mi plataforma SaaS de psicoeducación, este flujo de clasificación binaria con priorización del
+recall es directamente aplicable a un *screening* de riesgo psicológico: igual que aquí el Falso
+Negativo (no detectar un maligno) es el error crítico, en salud mental no detectar a un usuario en
+riesgo es el error que más debemos minimizar. La selección de características por correlación y la
+comparación baseline vs mejorado me dan un marco reproducible para construir modelos interpretables y
+auditables sobre datos de cuestionarios de bienestar.
+
+**Jonathan Fabricio Gualli Ramírez:**
+Desde mi lado de DevOps/desarrollo, lo que me quedó claro esta semana es que el modelo no acaba en el
+`.fit()`: acaba cuando se puede reproducir y desplegar. Que fijar `random_state` dé siempre el mismo
+resultado es lo mismo que busco en un *build* de CI/CD, y guardar el modelo en `.pkl` es tener un
+artefacto que puedo meter en una API y versionar. La idea de baseline vs mejorado me sirve como un
+filtro de calidad: solo sube la versión que mejora. Me veo automatizando este ciclo con un pipeline
+simple de MLOps en mi trabajo.
+
+**Raúl Marcelo Salazar Gamboa:**
+En mi ámbito profesional, el desarrollo de nuevos productos bancarios, puedo aplicar la regresión
+logística para mejorar los sistemas de puntuación (*scoring*) de cuentas colectoras, estatales y
+corrientes, mejorando la precisión en la evaluación del perfil de riesgo de los clientes jurídicos e
+institucionales. Esto permitirá optimizar la predictibilidad de comportamientos inusuales, mitigar el
+riesgo de contraparte y agilizar los tiempos de aprobación mediante un modelo automatizado, robusto y
+fácilmente auditable por los entes reguladores.
+
+---
+"""
+set_cell("Aplicación Profesional", APLICACION)
+
+# ===============================================================
 # 4) CELDAS NUEVAS — Random Forest (recall), interpretación clínica y ranking dinámico
 # ===============================================================
 rf_cells = [
