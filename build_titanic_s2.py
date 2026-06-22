@@ -42,13 +42,6 @@ Se comparan **9 modelos**, cada uno en versión *baseline* y *mejorada* (`GridSe
 > **Clase positiva = `survived = 1` (Sobrevivió).** Priorizamos el **Recall**: en un contexto de
 > rescate, el Falso Negativo (predecir que no sobrevivió alguien que sí podía sobrevivir) es el error
 > más costoso, igual que en el dataset clínico el FN era el más grave.
-
-### Análisis adicionales (diferenciadores vs el notebook de cáncer)
-
-- **Análisis bivariado** del EDA (supervivencia por sexo, clase, edad y tamaño de familia).
-- **Visualización del Árbol de Decisión** (`plot_tree`) — interpretabilidad gráfica.
-- **AdaBoost** como tercer ensamble (Marcelo no lo incluyó).
-- Contraste de **importancia de características**: coeficientes (lineal) vs Gini (árboles).
 """)
 
 # ============================================================ 1. ENTORNO
