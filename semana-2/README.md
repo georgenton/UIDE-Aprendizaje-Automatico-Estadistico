@@ -9,8 +9,8 @@
 
 ## Objetivo
 
-Aplicar el **mismo flujo de 3 fases** del notebook de Cáncer de Mama (de Marcelo) al dataset del
-**Titanic** (predicción de supervivencia), comparando **8 modelos** en versión *baseline* y *mejorada*
+Desarrollar el flujo de 3 fases (preprocesamiento, EDA y modelado) sobre el dataset del **Titanic**
+(predicción de supervivencia), comparando **8 modelos** en versión *baseline* y *mejorada*
 (`GridSearchCV` / `RandomizedSearchCV`, `scoring="recall"`):
 
 Regresión Logística · KNN · Naive Bayes · Random Forest · Árbol de Decisión · SVM ·
@@ -19,8 +19,8 @@ Gradient Boosting · **Red Neuronal (Keras)**.
 > **Clase positiva = `survived = 1`.** Prioridad: **Recall** (en rescate, el Falso Negativo es el
 > error más costoso).
 
-> **Nota:** este repositorio contiene **solo el notebook del Titanic** (responsabilidad del equipo). El
-> notebook de Cáncer de Mama de la Semana 2 lo entrega Marcelo por separado.
+> **Nota:** este repositorio contiene **el notebook del Titanic**. El notebook de Cáncer de Mama de la
+> Semana 2 corresponde a otro integrante del grupo y se entrega por separado.
 
 ## Dataset
 
@@ -41,10 +41,10 @@ semana-2/
 
 ## Decisión metodológica documentada
 
-El notebook de cáncer seleccionaba variables con **|r| > 0.4** (WBCD tiene correlaciones > 0.7). En el
-Titanic las correlaciones son más débiles (`sex` ≈ 0.54, `pclass` ≈ −0.34, `fare` ≈ 0.26): con 0.4 solo
-pasaría `sex`. Se adoptó **|r| > 0.2** → `sex`, `pclass`, `fare`, coherente con que *el Titanic es un
-problema menos separable linealmente*.
+En datasets con correlaciones lineales fuertes (como el WBCD, varias > 0.7) tiene sentido seleccionar
+con **|r| > 0.4**. En el Titanic las correlaciones son más débiles (`sex` ≈ 0.54, `pclass` ≈ −0.34,
+`fare` ≈ 0.26): con 0.4 solo pasaría `sex`. Se adoptó **|r| > 0.2** → `sex`, `pclass`, `fare`, coherente
+con que *el Titanic es un problema menos separable linealmente*.
 
 ## Resultados (versiones Mejoradas, ordenadas por Recall)
 

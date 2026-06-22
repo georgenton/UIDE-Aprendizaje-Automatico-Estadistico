@@ -1,8 +1,8 @@
 """
 Constructor del notebook S2_Titanic_Clasificacion.ipynb (Semana 2).
-Replica la infraestructura del notebook de Marcelo (helpers evaluate/plot_confusion/plot_roc,
+Infraestructura de evaluación reutilizable (helpers evaluate/plot_confusion/plot_roc,
 results, model_sizes, full_comparative_df, 3 gráficos comparativos) adaptada al Titanic,
-e implementa 8 modelos (incluida Red Neuronal Keras), igual que el notebook de Marcelo.
+e implementa 8 modelos de clasificación (incluida una Red Neuronal en Keras).
 """
 import nbformat as nbf
 from pathlib import Path
@@ -30,8 +30,8 @@ md(r"""
 
 ## Resumen del trabajo
 
-Este notebook aplica el **mismo flujo de tres fases** del notebook de Cáncer de Mama (de Marcelo)
-sobre el dataset del **Titanic**, para predecir la **supervivencia** de los pasajeros. El Titanic es
+Este notebook desarrolla un flujo de tres fases (preprocesamiento, EDA y modelado) sobre el dataset
+del **Titanic**, para predecir la **supervivencia** de los pasajeros. El Titanic es
 un dataset "sucio" (nulos, categóricas, redundancias) por lo que **el preprocesamiento es mucho más
 rico**, que es justamente su valor didáctico.
 
@@ -49,7 +49,7 @@ md(r"""
 ## 1. Configuración del entorno y carga de librerías
 
 `SEED = 42` en todo lo que acepte `random_state`. Paleta del equipo: `#2a9d8f` (no sobrevivió) y
-`#e76f51` (sobrevivió). Las funciones de evaluación son **las mismas** que las de Marcelo.
+`#e76f51` (sobrevivió). Se definen funciones de evaluación reutilizables para todos los modelos.
 """)
 code(r"""
 import os
@@ -96,7 +96,7 @@ sns.set_style("whitegrid")
 plt.rcParams["figure.figsize"] = (10, 6)
 plt.rcParams["font.size"] = 11
 
-# Rutas relativas (mismo esquema que el resto del repo)
+# Rutas relativas del proyecto (semana-2/)
 NB_DIR = Path.cwd()
 PROJ_DIR = NB_DIR.parent            # semana-2/
 MODELS_DIR = PROJ_DIR / "models"
@@ -204,7 +204,7 @@ df_clean.head()
 md(r"""
 ## 6. Detección de valores atípicos (IQR)
 
-Usamos la **misma** `iqr_outlier_mask()` que Marcelo. Revisamos `age`, `fare`, `sibsp`, `parch`.
+Aplicamos la función `iqr_outlier_mask()` sobre `age`, `fare`, `sibsp`, `parch`.
 Creamos la máscara pero **no la aplicamos todavía** (se usará solo en el experimento de comparación).
 Adelanto: los atípicos de `fare` son **reales** (billetes de lujo de 1ª clase) → señal, no ruido.
 """)
@@ -267,8 +267,8 @@ md(r"""
 
 Calculamos la correlación de Pearson de cada variable con `survived`.
 
-> **Nota metodológica (decisión del equipo):** el notebook de cáncer usó umbral **|r| > 0.4** porque
-> el WBCD tiene correlaciones lineales muy fuertes (varias > 0.7). En el **Titanic las correlaciones
+> **Nota metodológica (decisión del equipo):** en datasets con correlaciones lineales muy fuertes
+> (como el WBCD, varias > 0.7) tiene sentido un umbral **|r| > 0.4**. En el **Titanic las correlaciones
 > son más débiles** (la mayor, `sex`, ≈ 0.54; `pclass` ≈ −0.34; `fare` ≈ 0.26): con 0.4 solo pasaría
 > `sex`, dejando los modelos "mejorados" con una sola variable. Por eso adoptamos **|r| > 0.2**, que
 > retiene las 3 variables realmente predictivas (`sex`, `pclass`, `fare`). Esto es coherente con que
@@ -396,7 +396,7 @@ print(f"Variables seleccionadas para 'mejorado': {selected_features} (índices {
 md(r"""
 ## Experimento: StandardScaler vs MinMaxScaler
 
-Misma comparación que Marcelo, con Regresión Logística base. Se adopta el de mejor recall.
+Comparamos ambos escaladores con una Regresión Logística base. Se adopta el de mejor recall.
 """)
 code(r"""
 scaler_results = []
@@ -436,8 +436,8 @@ print("\nDecisión: se CONSERVAN los atípicos (los de fare son señal real de c
 md(r"""
 ## Funciones de evaluación reutilizables
 
-**Idénticas a las del notebook de Marcelo** (la de `evaluate` es compatible con sklearn y Keras),
-solo se adaptan las etiquetas de la matriz de confusión al contexto del Titanic.
+Definimos funciones reutilizables de evaluación (la de `evaluate` es compatible con modelos de
+sklearn y de Keras); las etiquetas de la matriz de confusión se ajustan al contexto del Titanic.
 """)
 code(r"""
 results = []                 # se llena con cada modelo/versión
@@ -445,7 +445,7 @@ best_models = {}
 model_sizes = {}             # tamaño (MB) de cada modelo guardado
 
 def evaluate(model, Xte, yte, name, version, save_key=None):
-    # Misma implementación que Marcelo: compatible con sklearn y Keras
+    # Compatible con modelos de sklearn y de Keras
     if isinstance(model, tf.keras.Model):
         proba = model.predict(Xte, verbose=0).ravel()
         pred = (proba > 0.5).astype(int)
@@ -765,7 +765,7 @@ las 100 máximas). El `class_weight` balanceado eleva el recall a costa de algo 
 md(r"""
 ## 24. Tabla Comparativa de Modelos (Versiones Mejoradas)
 
-Misma lógica que Marcelo: `full_comparative_df` con todas las métricas y el peso del modelo (`Peso_KB`).
+Consolidamos todas las métricas en `full_comparative_df`, añadiendo el peso de cada modelo (`Peso_KB`).
 """)
 code(r"""
 full_comparative_df = pd.DataFrame(results)
