@@ -2,7 +2,7 @@
 Constructor del notebook S2_Titanic_Clasificacion.ipynb (Semana 2).
 Replica la infraestructura del notebook de Marcelo (helpers evaluate/plot_confusion/plot_roc,
 results, model_sizes, full_comparative_df, 3 gráficos comparativos) adaptada al Titanic,
-e implementa los 9 modelos del enunciado (incluida Red Neuronal Keras y AdaBoost).
+e implementa 8 modelos (incluida Red Neuronal Keras), igual que el notebook de Marcelo.
 """
 import nbformat as nbf
 from pathlib import Path
@@ -14,7 +14,7 @@ def code(t): cells.append(nbf.v4.new_code_cell(t.strip("\n")))
 
 # ============================================================ PORTADA
 md(r"""
-# Clasificación de Supervivencia en el Titanic — 9 modelos de ML (Semana 2)
+# Clasificación de Supervivencia en el Titanic — 8 modelos de ML (Semana 2)
 
 **Maestría en Inteligencia Artificial Aplicada — UIDE**
 **Asignatura:** Aprendizaje Automático Estadístico — MIA-B
@@ -35,9 +35,9 @@ sobre el dataset del **Titanic**, para predecir la **supervivencia** de los pasa
 un dataset "sucio" (nulos, categóricas, redundancias) por lo que **el preprocesamiento es mucho más
 rico**, que es justamente su valor didáctico.
 
-Se comparan **9 modelos**, cada uno en versión *baseline* y *mejorada* (`GridSearchCV` /
+Se comparan **8 modelos**, cada uno en versión *baseline* y *mejorada* (`GridSearchCV` /
 `RandomizedSearchCV` con `scoring="recall"`): Regresión Logística, KNN, Naive Bayes, Random Forest,
-Árbol de Decisión, SVM, Gradient Boosting, **Red Neuronal (Keras)** y **AdaBoost**.
+Árbol de Decisión, SVM, Gradient Boosting y **Red Neuronal (Keras)**.
 
 > **Clase positiva = `survived = 1` (Sobrevivió).** Priorizamos el **Recall**: en un contexto de
 > rescate, el Falso Negativo (predecir que no sobrevivió alguien que sí podía sobrevivir) es el error
@@ -70,9 +70,8 @@ from sklearn.preprocessing import StandardScaler, MinMaxScaler
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
-from sklearn.ensemble import (RandomForestClassifier, GradientBoostingClassifier,
-                              AdaBoostClassifier)
-from sklearn.tree import DecisionTreeClassifier, plot_tree
+from sklearn.ensemble import RandomForestClassifier, GradientBoostingClassifier
+from sklearn.tree import DecisionTreeClassifier
 from sklearn.svm import SVC
 from sklearn.utils.class_weight import compute_class_weight
 from sklearn.metrics import (accuracy_score, precision_score, recall_score, f1_score,
@@ -352,60 +351,7 @@ plt.tight_layout(); plt.savefig(OUT_DIR / "05_heatmap_correlacion.png", dpi=120)
 """)
 
 md(r"""
-## 13. Análisis bivariado adicional (valor diferenciador)
-
-Estas visualizaciones **van más allá** del notebook de cáncer y exploran el contexto social del
-naufragio.
-""")
-code(r"""
-fig, axes = plt.subplots(2, 2, figsize=(14, 10))
-
-# a) Supervivencia por sexo
-sex_rate = df.groupby("sex")["survived"].mean()
-sns.barplot(x=sex_rate.index, y=sex_rate.values, palette=[COLOR_POS, COLOR_NEG], ax=axes[0, 0])
-axes[0, 0].set_title("a) Tasa de supervivencia por sexo")
-axes[0, 0].set_ylabel("Tasa de supervivencia")
-for i, v in enumerate(sex_rate.values): axes[0, 0].text(i, v + 0.01, f"{v:.0%}", ha="center", fontweight="bold")
-
-# b) Supervivencia por clase
-cls_rate = df.groupby("pclass")["survived"].mean()
-sns.barplot(x=cls_rate.index, y=cls_rate.values, palette="viridis", ax=axes[0, 1])
-axes[0, 1].set_title("b) Tasa de supervivencia por clase (pclass)")
-axes[0, 1].set_ylabel("Tasa de supervivencia"); axes[0, 1].set_xlabel("Clase")
-for i, v in enumerate(cls_rate.values): axes[0, 1].text(i, v + 0.01, f"{v:.0%}", ha="center", fontweight="bold")
-
-# c) Distribución de edad por supervivencia (KDE superpuesto)
-for cls, color in [(0, COLOR_NEG), (1, COLOR_POS)]:
-    sns.kdeplot(df_clean[df_clean.survived == cls]["age"], ax=axes[1, 0], fill=True,
-                color=color, alpha=0.4, label={0: "No sobrevivió", 1: "Sobrevivió"}[cls])
-axes[1, 0].axvline(12, color="k", ls="--", lw=1); axes[1, 0].set_title("c) Distribución de edad por supervivencia")
-axes[1, 0].legend()
-
-# d) Supervivencia por tamaño de familia (sibsp + parch)
-fam = df_clean.assign(family=df_clean["sibsp"] + df_clean["parch"])
-fam_rate = fam.groupby("family")["survived"].mean()
-sns.barplot(x=fam_rate.index, y=fam_rate.values, palette="magma", ax=axes[1, 1])
-axes[1, 1].set_title("d) Supervivencia por nº de familiares a bordo")
-axes[1, 1].set_xlabel("Familiares (sibsp+parch)"); axes[1, 1].set_ylabel("Tasa de supervivencia")
-
-plt.tight_layout(); plt.savefig(OUT_DIR / "06_bivariado.png", dpi=120); plt.show()
-
-print(f"Supervivencia mujeres: {sex_rate.get('female', np.nan):.0%} | hombres: {sex_rate.get('male', np.nan):.0%}")
-print(f"Supervivencia 1ª clase: {cls_rate.get(1, np.nan):.0%} | 3ª clase: {cls_rate.get(3, np.nan):.0%}")
-""")
-
-md(r"""
-**Interpretación bivariada:**
-- **a)** Las mujeres sobrevivieron a una tasa **~74%** vs **~19%** los hombres → política "mujeres y
-  niños primero".
-- **b)** La **1ª clase** tuvo la mayor tasa (~63%), la 3ª la menor → el estatus social importó.
-- **c)** Los **niños (<12 años)** muestran mayor densidad entre los sobrevivientes.
-- **d)** **Familias pequeñas (1–3)** sobrevivieron más que los pasajeros solos o las familias muy
-  grandes (más difíciles de evacuar juntos).
-""")
-
-md(r"""
-## 14. Conclusiones del EDA
+## 13. Conclusiones del EDA
 
 - **Variables más predictivas:** `sex` (la más fuerte), `pclass` y `fare`; el resto aporta poco de
   forma lineal.
@@ -676,8 +622,7 @@ plt.tight_layout(); plt.savefig(OUT_DIR / "m4_rf_gini.png", dpi=120); plt.show()
 # Modelo 5 — Árbol de Decisión
 model_block(
     19, "Modelo 5 — Árbol de Decisión",
-    "**Mejorada:** `RandomizedSearchCV` (max_depth, min_samples_leaf, criterion). Su ventaja es la "
-    "**interpretabilidad gráfica** (lo visualizamos abajo).",
+    "**Mejorada:** `RandomizedSearchCV` (max_depth, min_samples_leaf, criterion).",
     r"""
 dt_base = DecisionTreeClassifier(random_state=SEED).fit(X_train_std, y_train)
 row_b, pred_b, proba_b = evaluate(dt_base, X_test_std, y_test, "Árbol de Decisión", "Baseline")
@@ -696,17 +641,7 @@ plot_confusion(y_test, pred_b, "Árbol de Decisión — Baseline", "m5_dt_cm_bas
 plot_confusion(y_test, pred_m, "Árbol de Decisión — Mejorado", "m5_dt_cm_mej.png")
 plot_roc([("Baseline", y_test, proba_b), ("Mejorado", y_test, proba_m)], "ROC — Árbol de Decisión", "m5_dt_roc.png")
 save_sklearn(dt_best, "Árbol de Decisión", "best_dtree_model.joblib")
-""",
-    extra_md="### Visualización del Árbol de Decisión (valor diferenciador — Marcelo no lo tiene)",
-    extra_code=r"""
-plt.figure(figsize=(20, 8))
-plot_tree(dt_best, max_depth=3, feature_names=selected_features,
-          class_names=["No Sobrevivió", "Sobrevivió"], filled=True, rounded=True, fontsize=9)
-plt.title("Árbol de Decisión (primeros 3 niveles)")
-plt.tight_layout(); plt.savefig(OUT_DIR / "m5_dt_tree.png", dpi=120); plt.show()
-""",
-    interp="**Interpretación:** el árbol divide primero por `sex`, confirmando que es el factor más "
-           "decisivo de la supervivencia.")
+""")
 
 # Modelo 6 — SVM
 model_block(
@@ -824,33 +759,6 @@ md(r"""
 **¿Hubo overfitting?** Si la pérdida de validación deja de bajar mientras la de entrenamiento sigue
 cayendo, el `EarlyStopping` restaura los mejores pesos en ese punto (ver el nº de épocas entrenadas vs
 las 100 máximas). El `class_weight` balanceado eleva el recall a costa de algo de precisión.
-""")
-
-# Modelo 9 — AdaBoost
-model_block(
-    23, "Modelo 9 — AdaBoost (diferenciador — Marcelo no lo incluyó)",
-    "AdaBoost complementa a Random Forest y Gradient Boosting como **tercer ensamble**, enfocado en "
-    "corregir los errores de los ejemplos difíciles. **Mejorada:** `RandomizedSearchCV` (n_estimators, "
-    "learning_rate).\n\n> *Nota técnica: en scikit-learn 1.9 el parámetro `algorithm` fue eliminado "
-    "(`SAMME` es ahora el único), por lo que no se incluye en la búsqueda.*",
-    r"""
-ada_base = AdaBoostClassifier(random_state=SEED).fit(X_train_std, y_train)
-row_b, pred_b, proba_b = evaluate(ada_base, X_test_std, y_test, "AdaBoost", "Baseline")
-print("BASELINE:", {k: round(v,4) for k,v in row_b.items() if isinstance(v,float)})
-
-param_dist_ada = {"n_estimators":[50,100,200], "learning_rate":[0.5,1.0,1.5]}
-rs_ada = RandomizedSearchCV(AdaBoostClassifier(random_state=SEED), param_dist_ada,
-                            n_iter=9, scoring="recall", cv=cv, n_jobs=-1, random_state=SEED)
-rs_ada.fit(X_train_std[:, sel_idx], y_train)
-ada_best = rs_ada.best_estimator_
-row_m, pred_m, proba_m = evaluate(ada_best, X_test_std[:, sel_idx], y_test, "AdaBoost", "Mejorado")
-print("Mejores hiperparámetros:", rs_ada.best_params_)
-print("MEJORADO:", {k: round(v,4) for k,v in row_m.items() if isinstance(v,float)})
-
-plot_confusion(y_test, pred_b, "AdaBoost — Baseline", "m9_ada_cm_base.png")
-plot_confusion(y_test, pred_m, "AdaBoost — Mejorado", "m9_ada_cm_mej.png")
-plot_roc([("Baseline", y_test, proba_b), ("Mejorado", y_test, proba_m)], "ROC — AdaBoost", "m9_ada_roc.png")
-save_sklearn(ada_best, "AdaBoost", "best_adaboost_model.joblib")
 """)
 
 # ============================================================ TABLA COMPARATIVA

@@ -1,6 +1,4 @@
 Modelo,Versión,Accuracy,Precision,Recall,F1,AUC,Peso_KB
-AdaBoost,Baseline,0.7821,0.75,0.6522,0.6977,0.8249,63.9
-AdaBoost,Mejorado,0.7542,0.6667,0.7246,0.6944,0.8036,63.9
 Gradient Boosting,Baseline,0.7989,0.7895,0.6522,0.7143,0.8179,255.9
 Gradient Boosting,Mejorado,0.7821,0.7273,0.6957,0.7111,0.8356,255.9
 KNN,Baseline,0.8156,0.8,0.6957,0.7442,0.845,48.3
@@ -9,8 +7,8 @@ Naive Bayes,Baseline,0.7821,0.7273,0.6957,0.7111,0.8075,0.9
 Naive Bayes,Mejorado,0.7598,0.6806,0.7101,0.695,0.8005,0.9
 Random Forest,Baseline,0.8101,0.7869,0.6957,0.7385,0.8333,1628.6
 Random Forest,Mejorado,0.7709,0.7,0.7101,0.705,0.8232,1628.6
-Red Neuronal,Baseline,0.8101,0.7692,0.7246,0.7463,0.8577,24.5
-Red Neuronal,Mejorado,0.8045,0.7656,0.7101,0.7368,0.868,38.9
+Red Neuronal,Baseline,0.7821,0.7143,0.7246,0.7194,0.8553,24.5
+Red Neuronal,Mejorado,0.7877,0.7246,0.7246,0.7246,0.8593,38.9
 Reg. Logística,Baseline,0.8045,0.7931,0.6667,0.7244,0.8433,0.9
 Reg. Logística,Mejorado,0.7765,0.7302,0.6667,0.697,0.82,0.9
 SVM,Baseline,0.8101,0.8431,0.6232,0.7167,0.8374,17.4
