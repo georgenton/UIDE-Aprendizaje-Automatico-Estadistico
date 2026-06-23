@@ -50,16 +50,17 @@ con que *el Titanic es un problema menos separable linealmente*.
 
 | Modelo | Accuracy | Precision | Recall | F1 | AUC |
 |--------|:--------:|:---------:|:------:|:--:|:---:|
-| **Red Neuronal** | 0,788 | 0,725 | **0,725** | **0,725** | **0,859** |
-| Naive Bayes | 0,760 | 0,681 | 0,710 | 0,695 | 0,801 |
+| **Red Neuronal** | **0,816** | 0,757 | **0,768** | **0,763** | **0,865** |
+| Naive Bayes | 0,760 | 0,681 | 0,710 | 0,695 | 0,800 |
 | Random Forest | 0,771 | 0,700 | 0,710 | 0,705 | 0,823 |
 | Gradient Boosting | 0,782 | 0,727 | 0,696 | 0,711 | 0,836 |
-| KNN | 0,777 | 0,730 | 0,667 | 0,697 | 0,799 |
-| Reg. Logística | 0,777 | 0,730 | 0,667 | 0,697 | 0,820 |
-| SVM | 0,782 | 0,742 | 0,667 | 0,702 | 0,806 |
+| KNN | 0,776 | 0,730 | 0,667 | 0,697 | 0,799 |
+| Reg. Logística | 0,776 | 0,730 | 0,667 | 0,697 | 0,820 |
+| SVM | 0,782 | 0,742 | 0,667 | 0,702 | 0,805 |
 | Árbol de Decisión | 0,771 | 0,719 | 0,667 | 0,692 | 0,768 |
 
-**Mejor modelo:** la **Red Neuronal** mejorada (mejor Recall, F1 y AUC).
+**Mejor modelo:** la **Red Neuronal** mejorada (lidera las cuatro métricas). Su versión *baseline* usa
+una sola capa densa de 3 neuronas (punto de partida indicado por el profesor) y se mejora desde ahí.
 
 ## Conclusiones clave
 

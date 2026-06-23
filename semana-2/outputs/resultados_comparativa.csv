@@ -7,8 +7,8 @@ Naive Bayes,Baseline,0.7821,0.7273,0.6957,0.7111,0.8075,0.9
 Naive Bayes,Mejorado,0.7598,0.6806,0.7101,0.695,0.8005,0.9
 Random Forest,Baseline,0.8101,0.7869,0.6957,0.7385,0.8333,1628.6
 Random Forest,Mejorado,0.7709,0.7,0.7101,0.705,0.8232,1628.6
-Red Neuronal,Baseline,0.7821,0.7143,0.7246,0.7194,0.8553,24.5
-Red Neuronal,Mejorado,0.7877,0.7246,0.7246,0.7246,0.8593,38.9
+Red Neuronal,Baseline,0.7877,0.7123,0.7536,0.7324,0.8339,22.9
+Red Neuronal,Mejorado,0.8156,0.7571,0.7681,0.7626,0.865,38.9
 Reg. Logística,Baseline,0.8045,0.7931,0.6667,0.7244,0.8433,0.9
 Reg. Logística,Mejorado,0.7765,0.7302,0.6667,0.697,0.82,0.9
 SVM,Baseline,0.8101,0.8431,0.6232,0.7167,0.8374,17.4

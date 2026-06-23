@@ -1,4 +1,9 @@
 """
+[HISTÓRICO — NO RE-EJECUTAR] Generador original del notebook del Titanic (Semana 2). Tras adoptar la
+versión corregida por Marcelo, el notebook se genera ahora con `patch_titanic_s2.py` (base = notebook
+de Marcelo + gráfico del árbol + red neuronal base de 3 neuronas). Re-ejecutar este archivo
+sobreescribiría esa versión. Se conserva solo como referencia.
+
 Constructor del notebook S2_Titanic_Clasificacion.ipynb (Semana 2).
 Infraestructura de evaluación reutilizable (helpers evaluate/plot_confusion/plot_roc,
 results, model_sizes, full_comparative_df, 3 gráficos comparativos) adaptada al Titanic,
