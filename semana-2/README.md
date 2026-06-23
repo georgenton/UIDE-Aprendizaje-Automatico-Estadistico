@@ -19,8 +19,9 @@ Gradient Boosting · **Red Neuronal (Keras)**.
 > **Clase positiva = `survived = 1`.** Prioridad: **Recall** (en rescate, el Falso Negativo es el
 > error más costoso).
 
-> **Nota:** este repositorio contiene **el notebook del Titanic**. El notebook de Cáncer de Mama de la
-> Semana 2 corresponde a otro integrante del grupo y se entrega por separado.
+> **Nota:** la carpeta incluye **dos notebooks**: el del **Titanic** (este README) y el de **Cáncer de
+> Mama** (`S2_Cancer_Mama_Clasificacion.ipynb`), desarrollado por otro integrante del grupo y añadido
+> tal cual lo entregó.
 
 ## Dataset
 
@@ -32,7 +33,9 @@ eliminación de columnas con fuga como `alive`), que es su valor didáctico.
 
 ```
 semana-2/
-├── notebook/S2_Titanic_Clasificacion.ipynb   # Notebook completo y ejecutado (8 modelos)
+├── notebook/
+│   ├── S2_Titanic_Clasificacion.ipynb         # Notebook del Titanic (8 modelos)
+│   └── S2_Cancer_Mama_Clasificacion.ipynb     # Notebook de Cáncer de Mama (otro integrante)
 ├── models/                                     # best_*.joblib + 2 redes .keras
 ├── data/titanic_seaborn.csv
 ├── outputs/                                    # figuras + resultados_comparativa.csv
