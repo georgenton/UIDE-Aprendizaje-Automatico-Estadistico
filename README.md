@@ -14,6 +14,7 @@ Repositorio del **componente práctico** de la asignatura *Aprendizaje Automáti
 |:------:|------|:------:|
 | [Semana 1](semana-1/) | Clasificación supervisada — Cáncer de Mama (WBCD) y Titanic: Reg. Logística, KNN, Naive Bayes y Random Forest | ✅ |
 | [Semana 2](semana-2/) | Titanic — 8 modelos (añade Árbol de Decisión, SVM, Gradient Boosting y Red Neuronal) | ✅ |
+| [Semana 3](semana-3/) | WBCD y Titanic — Reducción de dimensionalidad (PCA/LDA) y agrupamiento (K-Means/GMM) | ✅ |
 
 ## Entorno
 
